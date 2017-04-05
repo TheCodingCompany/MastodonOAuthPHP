@@ -1,8 +1,8 @@
 <?php
 /**
- * Intellectual Property of Svensk Coding Company AB - Sweden All rights reserved.
+ * Intellectual Property of #Mastodon
  * 
- * @copyright (c) 2016, Svensk Coding Company AB
+ * @copyright (c) 2017, #Mastodon
  * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
  * @version 1.0
  * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
