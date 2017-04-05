@@ -138,4 +138,25 @@ class Mastodon
         return false;
     }
     
+    /**
+     * Get current user's statuses
+     */
+    public function getStatuses(){
+        if($this->mastodon_user_id > 0){
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            $statusses = $http::Get(
+                "api/v1/accounts/{$this->mastodon_user_id}/statuses",
+                null,
+                $this->getHeaders()
+            );
+            if(is_array($statusses) && count($statusses) > 0){
+                return $statusses;
+            }
+            
+        }
+        return false;
+    }
+    
 }

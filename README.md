@@ -51,7 +51,7 @@ $auth_url = $t->getAuthUrl();
  */
 
 //Request the bearer token
-$token_info = $t->getAccessToken("7c47d0c636314a1dff2142323b0104a74edf91884856dc0f78148f848d475136");
+$token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f78148f848d475136");
 
 /**
  * The above '$token_info' will now be an array with the info like below. (If successfull)
@@ -80,4 +80,12 @@ $user_info = $t->getUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
  */
 $followers = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
                 ->getFollowers();
+
+/**
+ * Get user statusses
+ */
+$statusses = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
+                ->getStatuses();
+
+
 ```
