@@ -48,19 +48,44 @@ trait oAuth
     );
     
     /**
+     * App config
+     * @var type 
+     */
+    public $app_config = array(
+        "client_name"   => "MastoTweet",
+        "redirect_uris" => "urn:ietf:wg:oauth:2.0:oob",
+        "scopes"        => "read write",
+        "website"       => "https://www.thecodingcompany.se"
+    );
+    
+    /**
+     * Get the API endpoint
+     * @return type
+     */
+    public function getApiURL(){
+        return "https://{$this->mastodon_api_url}";
+    }
+    
+    /**
+     * Get Request headers
+     * @return type
+     */
+    public function getHeaders(){
+        if(isset($this->credentials["bearer"])){
+            $this->headers["Authorization"] = "Bearer {$this->credentials["bearer"]}";
+        }
+        return $this->headers;
+    }
+    
+    /**
      * Start at getting or creating app
      */
-    private function getAppConfig(){
+    public function getAppConfig(){
         //Get singleton instance
         $http = HttpRequest::Instance("https://{$this->mastodon_api_url}");
         $config = $http::post(
             "api/v1/apps", //Endpoint
-            array(
-                "client_name"   => "MastoTweet",
-                "redirect_uris" => "urn:ietf:wg:oauth:2.0:oob",
-                "scopes"        => "read write",
-                "website"       => "https://www.thecodingcompany.se"
-            ),
+            $this->app_config,
             $this->headers
         );
         //Check and set our credentials
@@ -159,11 +184,10 @@ trait oAuth
         if(!empty($token_info) && isset($token_info["access_token"])){
                 
             //Add to our credentials
-            $credentials["bearer"] = $token_info["access_token"];
-            $this->credentials = $credentials;
+            $this->credentials["bearer"] = $token_info["access_token"];
 
             //Save to file
-            $this->_save_credentials($credentials);
+            $this->_save_credentials($this->credentials);
             return $token_info["access_token"];
         }
         return false;

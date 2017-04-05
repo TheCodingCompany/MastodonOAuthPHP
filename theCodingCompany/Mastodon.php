@@ -10,6 +10,8 @@
  */
 namespace theCodingCompany;
 
+use \theCodingCompany\HttpRequest;
+
 /**
  * Mastodon main class
  */
@@ -30,12 +32,42 @@ class Mastodon
     }
     
     /**
+     * Create an App and get client_id and client_secret
+     * @param type $name
+     * @param type $website_url
+     */
+    public function createApp($name, $website_url){
+        if(!empty($name) && !empty($website_url)){
+            
+            //Set our info
+            $this->app_config["client_name"] = $name;
+            $this->app_config["website"]     = $website_url;
+            
+            return $this->getAppConfig();
+        }
+        return false;
+    }
+    
+    /**
      * Get mastodon user
      * @param type $username
      * @param type $password
      */
     public function getUser($username, $password){
+        //Authenticate the user
+        $this->authUser($username, $password);        
         
+        //Create our object
+        $http = HttpRequest::Instance($this->getApiURL());
+        $user_info = $http::Get(
+            "api/v1/accounts/verify_credentials",
+            null,
+            $this->getHeaders()
+        );
+        if(is_array($user_info) && isset($user_info["username"])){
+            return $user_info;
+        }
+        return false;
     }
     
     

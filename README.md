@@ -7,6 +7,7 @@ PHP Library for Mastodon REST API
 * Full oAuth implementation to authorize your App by users.
 * Create and get authorization token, access token, client_id, client_secret and bearer token.
 * Authenticate users
+* Get user information
 
 ## Not yet in it
 
@@ -33,6 +34,12 @@ require_once("autoload.php");
 
 $t = new \theCodingCompany\Mastodon();
 
+/**
+ * Create a new App and get the client_id and client_secret
+ */
+$token_info = $t->createApp("MyCoolAppName", "http://www.internet.com");
+
+
 //Get the authorization url
 $auth_url = $t->getAuthUrl();
 /*
@@ -54,4 +61,15 @@ $token_info = $t->getAccessToken("7c47d0c636314a1dff2142323b0104a74edf91884856dc
         "bearer": "77e0daa7f252941ae8343543653454f4de8ca7ae087caec4ba85a363d5e08de0d"
     }
  */
+
+/**
+ * Authenticate a user by username and password and receive the bearer token
+ */
+$bearer_token = $t->authUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
+
+/**
+ * Get the userinfo by authentication
+ */
+
+$user_info = $t->getUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
 ```
