@@ -37,7 +37,7 @@ final class HttpRequest
      * Enable debugging
      * @var type 
      */
-    private static $debug = true;
+    private static $debug = false;
 
     /**
      * Construct new HttpRequest
@@ -93,7 +93,7 @@ final class HttpRequest
         return self::http_request(
             "GET", 
             self::$base_url.self::$base_path.$path, 
-            $headers,
+            array("Content-Type" => "application/json; charset=utf-8", "Accept" => "*/*"),
             $parameters
         );
     }
@@ -163,7 +163,7 @@ final class HttpRequest
         /**
          * @version 1.1 Updated method
          */
-        $response = \file_get_contents($url, null, $context);
+        $response = @file_get_contents($url, null, $context);
 
         //If we have an error or not
         if ($response === FALSE) {
@@ -195,12 +195,15 @@ final class HttpRequest
     private static function debug_response($url, $context){
         //Get and debug headers
         if(self::$debug){
-            //Get meta data
-            $req_headers = stream_get_meta_data(\fopen($url, "r", false, $context));
-            if(isset($req_headers["wrapper_data"])){
-                echo "<pre>".print_r($req_headers["wrapper_data"], true)."</pre>";
-            }else{
-                echo "<pre>".print_r($req_headers, true)."</pre>";
+            //Get meta data for debugging
+            $fp = @fopen($url, "r", false, $context);
+            if($fp){
+                $req_headers = stream_get_meta_data();
+                if(isset($req_headers["wrapper_data"])){
+                    echo "<pre>".print_r($req_headers["wrapper_data"], true)."</pre>";
+                }else{
+                    echo "<pre>".print_r($req_headers, true)."</pre>";
+                }
             }
             echo "<pre>Check host alive headers<br/>\r\n";
             $headers = @get_headers($url);
