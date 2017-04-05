@@ -3,9 +3,10 @@ PHP Library for Mastodon REST API
 
 ## What's in it?
 
-* App creation
-* Full oAuth implementation to authorize your App by users
+* App creation.
+* Full oAuth implementation to authorize your App by users.
 * Create and get authorization token, access token, client_id, client_secret and bearer token.
+* Authenticate users
 
 ## Not yet in it
 

@@ -29,8 +29,14 @@ class Mastodon
         $this->setMastodonDomain($domainname);
     }
     
-    
-    
+    /**
+     * Get mastodon user
+     * @param type $username
+     * @param type $password
+     */
+    public function getUser($username, $password){
+        
+    }
     
     
     

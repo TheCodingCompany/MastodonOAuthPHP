@@ -77,7 +77,7 @@ final class HttpRequest
         return self::http_request(
             "POST", 
             self::$base_url.self::$base_path.$path, 
-            array("Content-Type" => "application/json; charset=utf-8", "Accept" => "*/*"),
+            $headers,
             $post_data
         );
     }
@@ -93,7 +93,7 @@ final class HttpRequest
         return self::http_request(
             "GET", 
             self::$base_url.self::$base_path.$path, 
-            array("Content-Type" => "application/json; charset=utf-8", "Accept" => "*/*"),
+            $headers,
             $parameters
         );
     }

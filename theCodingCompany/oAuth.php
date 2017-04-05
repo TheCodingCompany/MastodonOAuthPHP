@@ -27,6 +27,15 @@ trait oAuth
      * @var type 
      */
     private $mastodon_api_url = "mastodon.social";
+    
+    /**
+     * Default headers for each request
+     * @var type 
+     */
+    private $headers = array(
+        "Content-Type" => "application/json; charset=utf-8", 
+        "Accept" => "*/*"
+    );
         
     /**
      * Holds our client_id and secret
@@ -51,7 +60,8 @@ trait oAuth
                 "redirect_uris" => "urn:ietf:wg:oauth:2.0:oob",
                 "scopes"        => "read write",
                 "website"       => "https://www.thecodingcompany.se"
-            )
+            ),
+            $this->headers
         );
         //Check and set our credentials
         if(!empty($config) && isset($config["client_id"]) && isset($config["client_secret"])){
@@ -141,6 +151,25 @@ trait oAuth
     }
     
     /**
+     * Handle our bearer token info
+     * @param type $token_info
+     * @return boolean
+     */
+    private function _handle_bearer($token_info = null){
+        if(!empty($token_info) && isset($token_info["access_token"])){
+                
+            //Add to our credentials
+            $credentials["bearer"] = $token_info["access_token"];
+            $this->credentials = $credentials;
+
+            //Save to file
+            $this->_save_credentials($credentials);
+            return $token_info["access_token"];
+        }
+        return false;
+    }
+    
+    /**
      * Get access token
      * @param type $auth_code
      */
@@ -160,20 +189,47 @@ trait oAuth
                     "client_id"     => $credentials["client_id"],
                     "client_secret" => $credentials["client_secret"],
                     "code"          => $auth_code
-                )
+                ),
+                $this->headers
             );
             
-            if(isset($token_info["access_token"])){
-                
-                //Add to our credentials
-                $credentials["bearer"] = $token_info["access_token"];
-                $this->credentials = $credentials;
-
-                //Save to file
-                $this->_save_credentials($credentials);
-                return $token_info["access_token"];
-            }
+            //Save our token info
+            return $this->_handle_bearer($token_info);
         }
+        return false;
+    }
+    
+    /**
+     * Authenticate a user by username and password
+     * @param type $username usernam@domainname.com
+     * @param type $password The password
+     */
+    public function authUser($username = null, $password = null){
+        if(!empty($username) && stristr($username, "@") !== FALSE && !empty($password)){
+            
+            //Get the API credentials
+            $credentials = $this->_get_credentials();
+
+            if(is_array($credentials) && isset($credentials["client_id"])){
+
+                //Request access token in exchange for our Authorization token
+                $http = HttpRequest::Instance("https://{$this->mastodon_api_url}");
+                $token_info = $http::Post(
+                    "oauth/token",
+                    array(
+                        "grant_type"    => "password",
+                        "client_id"     => $credentials["client_id"],
+                        "client_secret" => $credentials["client_secret"],
+                        "username"      => $username,
+                        "password"      => $password,
+                    ),
+                    $this->headers
+                );
+                
+                //Save our token info
+                return $this->_handle_bearer($token_info);
+            }
+        }        
         return false;
     }
 }
