@@ -8,6 +8,8 @@ PHP Library for Mastodon REST API
 * Create and get authorization token, access token, client_id, client_secret and bearer token.
 * Authenticate users
 * Get user information
+* Get user followers and following
+* Get user status
 
 ## Not yet in it
 
@@ -72,4 +74,10 @@ $bearer_token = $t->authUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
  */
 
 $user_info = $t->getUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
+
+/**
+ * Get user followers / following
+ */
+$followers = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
+                ->getFollowers();
 ```

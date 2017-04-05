@@ -50,3 +50,9 @@ $bearer_token = $t->authUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
  */
 
 $user_info = $t->getUser("vangelier@hotmail.com", "MySecretP@ssW0rd");
+
+/**
+ * Get user followers / following
+ */
+$followers = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
+                ->getFollowers();

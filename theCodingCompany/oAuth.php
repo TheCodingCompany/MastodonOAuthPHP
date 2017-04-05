@@ -228,7 +228,7 @@ trait oAuth
      * @param type $username usernam@domainname.com
      * @param type $password The password
      */
-    public function authUser($username = null, $password = null){
+    private function authUser($username = null, $password = null){
         if(!empty($username) && stristr($username, "@") !== FALSE && !empty($password)){
             
             //Get the API credentials

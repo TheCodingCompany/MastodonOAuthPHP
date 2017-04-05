@@ -21,6 +21,18 @@ class Mastodon
     use \theCodingCompany\oAuth;
     
     /**
+     * Holds our current user_id for :id in API calls
+     * @var type 
+     */
+    private $mastodon_user_id = null;
+    
+    /**
+     * Holds our current userinfo
+     * @var type 
+     */
+    private $mastodon_userinfo = null;
+    
+    /**
      * Construct new Mastodon class
      */
     public function __construct($domainname = "mastodon.social") {        
@@ -49,27 +61,81 @@ class Mastodon
     }
     
     /**
+     * Authenticate the user
+     * @param type $username
+     * @param type $password
+     */
+    public function authenticate($username = null, $password = null) {
+        $this->authUser($username, $password);
+        
+        //Set current working userid
+        $this->mastodon_userinfo = $this->getUser();
+        
+        return $this; //For method chaining
+    }
+    
+    /**
      * Get mastodon user
      * @param type $username
      * @param type $password
      */
-    public function getUser($username, $password){
-        //Authenticate the user
-        $this->authUser($username, $password);        
-        
-        //Create our object
-        $http = HttpRequest::Instance($this->getApiURL());
-        $user_info = $http::Get(
-            "api/v1/accounts/verify_credentials",
-            null,
-            $this->getHeaders()
-        );
-        if(is_array($user_info) && isset($user_info["username"])){
-            return $user_info;
+    public function getUser(){        
+        if(empty($this->mastodon_userinfo)){
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            $user_info = $http::Get(
+                "api/v1/accounts/verify_credentials",
+                null,
+                $this->getHeaders()
+            );
+            if(is_array($user_info) && isset($user_info["username"])){
+                $this->mastodon_user_id = (int)$user_info["id"];
+                return $user_info;
+            }
+        }
+        return $this->mastodon_userinfo;
+    }
+    
+    /**
+     * Get current user's followers
+     */
+    public function getFollowers(){
+        if($this->mastodon_user_id > 0){
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            $accounts = $http::Get(
+                "api/v1/accounts/{$this->mastodon_user_id}/followers",
+                null,
+                $this->getHeaders()
+            );
+            if(is_array($accounts) && count($accounts) > 0){
+                return $accounts;
+            }
+            
         }
         return false;
     }
     
-    
+    /**
+     * Get current user's following
+     */
+    public function getFollowing(){
+        if($this->mastodon_user_id > 0){
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            $accounts = $http::Get(
+                "api/v1/accounts/{$this->mastodon_user_id}/following",
+                null,
+                $this->getHeaders()
+            );
+            if(is_array($accounts) && count($accounts) > 0){
+                return $accounts;
+            }
+            
+        }
+        return false;
+    }
     
 }
