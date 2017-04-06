@@ -122,38 +122,18 @@ trait oAuth
     }
     
     /**
-     * Get our credentials either from file to by creating a new APP
-     */
-    private function _get_credentials(){
-        if(!is_array($this->credentials) || !isset($this->credentials["client_id"])){
-            
-            //Check for existing or create new
-            if($this->_check_credentials() === FALSE){
-                //Get new credentials
-                $this->getAppConfig();
-            }
-            
-            //Save to file
-            $this->_save_credentials($this->credentials);
-        }
-        return $this->credentials;
-    }
-    
-    /**
      * Create authorization url
      */
     public function getAuthUrl(){
-        //Get the API credentials
-        $credentials = $this->_get_credentials();
 
-        if(is_array($credentials) && isset($credentials["client_id"])){
+        if(is_array($this->credentials) && isset($this->credentials["client_id"])){
             
             //Return the Authorization URL
             return "https://{$this->mastodon_api_url}/oauth/authorize/?".http_build_query(array(
                     "response_type"    => "code",
                     "redirect_uri"     => "urn:ietf:wg:oauth:2.0:oob",
                     "scope"            => "read write",
-                    "client_id"        => $credentials["client_id"]
+                    "client_id"        => $this->credentials["client_id"]
                 ));
         }        
         return false;        
@@ -182,10 +162,8 @@ trait oAuth
      * @param type $auth_code
      */
     public function getAccessToken($auth_code = ""){
-        //Get the API credentials
-        $credentials = $this->_get_credentials();
         
-        if(is_array($credentials) && isset($credentials["client_id"])){
+        if(is_array($this->credentials) && isset($this->credentials["client_id"])){
             
             //Request access token in exchange for our Authorization token
             $http = HttpRequest::Instance("https://{$this->mastodon_api_url}");
@@ -194,8 +172,8 @@ trait oAuth
                 array(
                     "grant_type"    => "authorization_code",
                     "redirect_uri"  => "urn:ietf:wg:oauth:2.0:oob",
-                    "client_id"     => $credentials["client_id"],
-                    "client_secret" => $credentials["client_secret"],
+                    "client_id"     => $this->credentials["client_id"],
+                    "client_secret" => $this->credentials["client_secret"],
                     "code"          => $auth_code
                 ),
                 $this->headers
@@ -215,10 +193,8 @@ trait oAuth
     private function authUser($username = null, $password = null){
         if(!empty($username) && stristr($username, "@") !== FALSE && !empty($password)){
             
-            //Get the API credentials
-            $credentials = $this->_get_credentials();
 
-            if(is_array($credentials) && isset($credentials["client_id"])){
+            if(is_array($this->credentials) && isset($this->credentials["client_id"])){
 
                 //Request access token in exchange for our Authorization token
                 $http = HttpRequest::Instance("https://{$this->mastodon_api_url}");
@@ -226,8 +202,8 @@ trait oAuth
                     "oauth/token",
                     array(
                         "grant_type"    => "password",
-                        "client_id"     => $credentials["client_id"],
-                        "client_secret" => $credentials["client_secret"],
+                        "client_id"     => $this->credentials["client_id"],
+                        "client_secret" => $this->credentials["client_secret"],
                         "username"      => $username,
                         "password"      => $password,
                     ),
