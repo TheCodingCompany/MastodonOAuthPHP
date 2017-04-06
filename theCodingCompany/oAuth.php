@@ -17,10 +17,6 @@ use theCodingCompany\HttpRequest;
  */
 trait oAuth
 {
-    /**
-     * Filename with our credentials
-     */
-    public static $_API_CREDENTIALS_FILENAME = "api_credentials.json";
     
     /**
      * Our API to use
@@ -41,7 +37,7 @@ trait oAuth
      * Holds our client_id and secret
      * @var array 
      */
-    public $credentials = array(
+    private $credentials = array(
         "client_id"     => "",
         "client_secret" => "",
         "bearer"        => ""
@@ -51,12 +47,30 @@ trait oAuth
      * App config
      * @var type 
      */
-    public $app_config = array(
+    private $app_config = array(
         "client_name"   => "MastoTweet",
         "redirect_uris" => "urn:ietf:wg:oauth:2.0:oob",
         "scopes"        => "read write",
         "website"       => "https://www.thecodingcompany.se"
     );
+
+    /**
+     * Set credentials
+     * @var array
+     **/
+     public function setCredentials(array $credentials)
+     {
+        $this->credentials = $credentials;
+     }
+
+     /**
+     * Set credentials
+     * @return array
+     **/
+     public function getCredentials()
+     {
+        return $this->credentials;
+     }
     
     /**
      * Get the API endpoint
@@ -98,20 +112,6 @@ trait oAuth
     }
     
     /**
-     * Save our credentials (tokens) to file
-     * @param type $config
-     */
-    private function _save_credentials($config){
-        //Set filename to save our credentials to
-        $filename = realpath(__DIR__."/../".self::$_API_CREDENTIALS_FILENAME);
-        if(!file_put_contents($filename, json_encode($config))){
-            echo "Can't write our credentials to file. File: {$filename}";
-            return false;
-        }
-        return true;
-    }
-    
-    /**
      * Set the correct domain name
      * @param type $domainname
      */
@@ -119,22 +119,6 @@ trait oAuth
         if(!empty($domainname)){
             $this->mastodon_api_url = $domainname;
         }
-    }
-    
-    /**
-     * Check credentials as file
-     * @return boolean
-     */
-    private function _check_credentials(){
-        //Check credentials
-        $filename = realpath(__DIR__."/../".self::$_API_CREDENTIALS_FILENAME);
-        if(file_exists($filename)){
-            $this->credentials = json_decode(file_get_contents($filename), TRUE); //Force array
-            return true;
-        }
-        
-        echo "No credentials found. File: {$filename}";
-        return false;
     }
     
     /**
