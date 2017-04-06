@@ -150,8 +150,6 @@ trait oAuth
             //Add to our credentials
             $this->credentials["bearer"] = $token_info["access_token"];
 
-            //Save to file
-            $this->_save_credentials($this->credentials);
             return $token_info["access_token"];
         }
         return false;
