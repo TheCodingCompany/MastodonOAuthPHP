@@ -11,9 +11,12 @@ PHP Library for Mastodon REST API
 * Get user followers and following
 * Get user status
 
-## Not yet in it
 
-* Mastodon specific API call's (working on it as we speak.....well we don't speak. Doesn't matter)
+## Installation using Composer
+
+```
+composer require thecodingcompany/php-mastodon
+```
 
 ## Questions and example?
 
