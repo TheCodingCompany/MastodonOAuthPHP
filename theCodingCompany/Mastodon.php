@@ -36,8 +36,6 @@ class Mastodon
      * Construct new Mastodon class
      */
     public function __construct($domainname = "mastodon.social") {        
-        //Look for credentials file
-        $this->_check_credentials();
         
         //Set the domain name to use
         $this->setMastodonDomain($domainname);
