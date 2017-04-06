@@ -90,7 +90,7 @@ trait oAuth
         );
         //Check and set our credentials
         if(!empty($config) && isset($config["client_id"]) && isset($config["client_secret"])){
-            array_merge($this->credentials, $config);
+            $this->credentials = array_merge($this->credentials, $config);
             return $this->credentials;
         }else{
             return false;
