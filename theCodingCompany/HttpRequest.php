@@ -198,7 +198,7 @@ final class HttpRequest
             //Get meta data for debugging
             $fp = @fopen($url, "r", false, $context);
             if($fp){
-                $req_headers = stream_get_meta_data();
+                $req_headers = stream_get_meta_data($fp);
                 if(isset($req_headers["wrapper_data"])){
                     echo "<pre>".print_r($req_headers["wrapper_data"], true)."</pre>";
                 }else{

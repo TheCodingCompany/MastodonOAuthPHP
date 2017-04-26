@@ -126,7 +126,6 @@ trait oAuth
      * Create authorization url
      */
     public function getAuthUrl(){
-
         if(is_array($this->credentials) && isset($this->credentials["client_id"])){
             
             //Return the Authorization URL
@@ -205,12 +204,12 @@ trait oAuth
                         "client_secret" => $this->credentials["client_secret"],
                         "username"      => $username,
                         "password"      => $password,
+                        "scope"         => "read write"
                     ),
                     $this->headers
                 );
                 
-                //Save our token info
-                return $this->_handle_bearer($token_info);
+                return $this->credentials["bearer"] = $token_info["access_token"];
             }
         }        
         return false;

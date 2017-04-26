@@ -73,6 +73,31 @@ class Mastodon
     }
     
     /**
+     * Post a new status to your {visibility} timeline
+     * @param type $text
+     * @param type $visibility
+     */
+    public function postStatus($text = "", $visibility = "public"){
+        if(!empty($this->getCredentials())){
+            
+            $headers = $this->getHeaders();
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            $status = $http::Post(
+                "api/v1/statuses",
+                array(
+                    "status"        => $text,
+                    "visibility"    => $visibility
+                ),
+                $headers
+            );
+            return $status;
+        }
+        return false;
+    }
+    
+    /**
      * Get mastodon user
      * @param type $username
      * @param type $password
@@ -89,6 +114,8 @@ class Mastodon
             if(is_array($user_info) && isset($user_info["username"])){
                 $this->mastodon_user_id = (int)$user_info["id"];
                 return $user_info;
+            }else{
+                echo "Authentication or authorization failed\r\n";
             }
         }
         return $this->mastodon_userinfo;
