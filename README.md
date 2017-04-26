@@ -10,6 +10,7 @@ PHP Library for Mastodon REST API
 * Get user information
 * Get user followers and following
 * Get user status
+* Post status update
 
 
 ## Installation using Composer
@@ -90,5 +91,12 @@ $followers = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
 $statusses = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
                 ->getStatuses();
 
+
+/**
+* Post status update
+*/
+
+$status = $t->authenticate("vangelier@hotmail.com", "MySecretP@ssW0rd")
+            ->postStatus("Text status update");
 
 ```
