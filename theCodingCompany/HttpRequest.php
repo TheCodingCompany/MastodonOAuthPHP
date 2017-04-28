@@ -88,7 +88,7 @@ final class HttpRequest
      * @param type $parameters
      * @param type $headers
      */
-    public function Get($path = "", $parameters = array(), $headers = array()){
+    public static function Get($path = "", $parameters = array(), $headers = array()){
         //Sen the request and return response
         return self::http_request(
             "GET", 
