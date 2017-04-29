@@ -88,7 +88,7 @@ final class HttpRequest
      * @param type $parameters
      * @param type $headers
      */
-    public function Get($path = "", $parameters = array(), $headers = array()){
+    public static function Get($path = "", $parameters = array(), $headers = array()){
         //Sen the request and return response
         return self::http_request(
             "GET", 
@@ -130,8 +130,19 @@ final class HttpRequest
             foreach($parameters as $k => $v) {
                 $content .= "&".urlencode($k)."=" . urlencode($v);
             }
-            //Strip first & sign
-            $opts["http"]["content"] = substr($content, 1);
+
+            // Strip first & sign
+            $content = substr($content, 1);
+
+            // If the method is get, append to the URL            
+            if ($method == "GET") {
+                $url .= "?" . $content;
+            }
+            // Otherwise, post in the content
+            else {
+                //Strip first & sign
+                $opts["http"]["content"] = $content;
+            }
         }
         elseif ($parameters) {
             //Send as is
