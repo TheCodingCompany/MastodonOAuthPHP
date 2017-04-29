@@ -195,11 +195,11 @@ class Mastodon
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             
-			$notifications = $http::Get(
-				"api/v1/notifications",
-				($since_id != null ? array('since_id'=>$since_id) : null),
-				$this->getHeaders()
-			);
+            $notifications = $http::Get(
+                "api/v1/notifications",
+                ($since_id != null ? array('since_id'=>$since_id) : null),
+                $this->getHeaders()
+            );
             
             if(is_array($notifications) && count($notifications) > 0){
                 return $notifications;
@@ -218,18 +218,18 @@ class Mastodon
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             
-			$clear_result = $http::Post(
-				"api/v1/notifications/clear",
-				null,
-				$this->getHeaders()
-			);
-			
-			if(is_array($clear_result)) {
-				return true;
-			}
-			else {
-				return false;
-			}
+            $clear_result = $http::Post(
+                "api/v1/notifications/clear",
+                null,
+                $this->getHeaders()
+            );
+            
+            if(is_array($clear_result)) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
         return false;
     }
