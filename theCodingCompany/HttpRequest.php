@@ -130,8 +130,19 @@ final class HttpRequest
             foreach($parameters as $k => $v) {
                 $content .= "&".urlencode($k)."=" . urlencode($v);
             }
-            //Strip first & sign
-            $opts["http"]["content"] = substr($content, 1);
+
+			// Strip first & sign
+			$content = substr($content, 1);
+
+			// If the method is get, append to the URL            
+            if ($method == "GET") {
+            	$url .= "?" . $content;
+            }
+            // Otherwise, post in the content
+            else {
+	            //Strip first & sign
+    	        $opts["http"]["content"] = $content;
+    	    }
         }
         elseif ($parameters) {
             //Send as is

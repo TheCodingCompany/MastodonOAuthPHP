@@ -183,5 +183,55 @@ class Mastodon
         }
         return false;
     }
+
+    /**
+     * Get current user's notifications. If $since_id is provided, will only get the items
+     * after since_id.
+     * 
+     */
+    public function getNotifications($since_id = null){
+        if($this->mastodon_user_id > 0){
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            
+			$notifications = $http::Get(
+				"api/v1/notifications",
+				($since_id != null ? array('since_id'=>$since_id) : null),
+				$this->getHeaders()
+			);
+            
+            if(is_array($notifications) && count($notifications) > 0){
+                return $notifications;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Clears the user's notifications. Returns true if successful.
+     * 
+     */
+    public function clearNotifications(){
+        if($this->mastodon_user_id > 0){
+            
+            //Create our object
+            $http = HttpRequest::Instance($this->getApiURL());
+            
+			$clear_result = $http::Post(
+				"api/v1/notifications/clear",
+				null,
+				$this->getHeaders()
+			);
+			
+			if(is_array($clear_result)) {
+				return true;
+			}
+			else {
+				return false;
+			}
+        }
+        return false;
+    }
     
 }
