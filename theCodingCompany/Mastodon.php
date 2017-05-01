@@ -77,7 +77,7 @@ class Mastodon
      * @param type $text
      * @param type $visibility
      */
-    public function postStatus($text = "", $visibility = "public"){
+    public function postStatus($text = "", $visibility = "public", $in_reply_to_id = null){
         if(!empty($this->getCredentials())){
             
             $headers = $this->getHeaders();
@@ -88,7 +88,8 @@ class Mastodon
                 "api/v1/statuses",
                 array(
                     "status"        => $text,
-                    "visibility"    => $visibility
+                    "visibility"    => $visibility,
+                    "in_reply_to_id" => $in_reply_to_id
                 ),
                 $headers
             );
