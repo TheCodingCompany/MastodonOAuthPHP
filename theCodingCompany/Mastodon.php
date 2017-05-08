@@ -22,13 +22,13 @@ class Mastodon
     
     /**
      * Holds our current user_id for :id in API calls
-     * @var type 
+     * @var string
      */
     private $mastodon_user_id = null;
     
     /**
      * Holds our current userinfo
-     * @var type 
+     * @var array
      */
     private $mastodon_userinfo = null;
     
@@ -40,11 +40,12 @@ class Mastodon
         //Set the domain name to use
         $this->setMastodonDomain($domainname);
     }
-    
+
     /**
      * Create an App and get client_id and client_secret
-     * @param type $name
-     * @param type $website_url
+     * @param string $name
+     * @param string $website_url
+     * @return array|bool
      */
     public function createApp($name, $website_url){
         if(!empty($name) && !empty($website_url)){
@@ -57,11 +58,12 @@ class Mastodon
         }
         return false;
     }
-    
+
     /**
      * Authenticate the user
-     * @param type $username
-     * @param type $password
+     * @param string $username
+     * @param string $password
+     * @return $this
      */
     public function authenticate($username = null, $password = null) {
         $this->authUser($username, $password);
@@ -71,11 +73,12 @@ class Mastodon
         
         return $this; //For method chaining
     }
-    
+
     /**
      * Post a new status to your {visibility} timeline
-     * @param type $text
-     * @param type $visibility
+     * @param string $text
+     * @param string $visibility
+     * @return HttpRequest | bool
      */
     public function postStatus($text = "", $visibility = "public"){
         if(!empty($this->getCredentials())){
@@ -99,8 +102,6 @@ class Mastodon
     
     /**
      * Get mastodon user
-     * @param type $username
-     * @param type $password
      */
     public function getUser(){        
         if(empty($this->mastodon_userinfo)){
