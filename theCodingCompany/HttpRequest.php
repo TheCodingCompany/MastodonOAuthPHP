@@ -17,7 +17,7 @@ final class HttpRequest
 {
     /**
      * Holds our base path. In most cases this is just /, but it can be /api for example
-     * @var type 
+     * @var string
      */
     private static $base_path = "/";
 
@@ -29,13 +29,13 @@ final class HttpRequest
     
     /**
      * Holds our instance
-     * @var type 
+     * @var array
      */
     private static $instance = array();
     
     /**
      * Enable debugging
-     * @var type 
+     * @var bool
      */
     private static $debug = false;
 
@@ -53,9 +53,9 @@ final class HttpRequest
     
     /**
      * Singleton design pattern
-     * @param type $base_url The full FQDN url. http://api.domainname.com
-     * @param type $base_path The endpoint. We start at /
-     * @return instance
+     * @param string $base_url The full FQDN url. http://api.domainname.com
+     * @param string $base_path The endpoint. We start at /
+     * @return HttpRequest instance
      */
     public static function Instance($base_url = "", $base_path = "/"){
         $cls = get_called_class();
@@ -67,9 +67,10 @@ final class HttpRequest
 
     /**
      * HTTP POST request
-     * @param type $path
-     * @param type $parameters
-     * @param type $headers
+     * @param string $path
+     * @param array $parameters
+     * @param array $headers
+     * @return bool
      */
     public static function Post($path = "", $parameters = array(), $headers = array()){
         //Sen the request and return response
@@ -84,9 +85,10 @@ final class HttpRequest
 
     /**
      * HTTP GET request
-     * @param type $path
-     * @param type $parameters
-     * @param type $headers
+     * @param string $path
+     * @param array $parameters
+     * @param array $headers
+     * @return bool
      */
     public static function Get($path = "", $parameters = array(), $headers = array()){
         //Sen the request and return response
@@ -100,9 +102,10 @@ final class HttpRequest
 
     /**
     * Buikd the HTTP request
-    * @param type $method  GET|POST
-    * @param type $headers
-    * @param type $parameters
+    * @param string $method  GET|POST
+    * @param string $url
+    * @param array $headers
+    * @param array $parameters
     * @return boolean
     */
    private static function http_request($method = "GET", $url = "", $headers = array(), $parameters = array()) {
@@ -200,8 +203,8 @@ final class HttpRequest
     
     /**
      * Debug method for response analyzing
-     * @param type $url
-     * @param type $context
+     * @param string $url
+     * @param resource $context
      */
     private static function debug_response($url, $context){
         //Get and debug headers

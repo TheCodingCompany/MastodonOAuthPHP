@@ -20,13 +20,13 @@ trait oAuth
     
     /**
      * Our API to use
-     * @var type 
+     * @var string
      */
     private $mastodon_api_url = "mastodon.social";
     
     /**
      * Default headers for each request
-     * @var type 
+     * @var array
      */
     private $headers = array(
         "Content-Type" => "application/json; charset=utf-8", 
@@ -45,7 +45,7 @@ trait oAuth
     
     /**
      * App config
-     * @var type 
+     * @var array
      */
     private $app_config = array(
         "client_name"   => "MastoTweet",
@@ -74,7 +74,7 @@ trait oAuth
     
     /**
      * Get the API endpoint
-     * @return type
+     * @return string
      */
     public function getApiURL(){
         return "https://{$this->mastodon_api_url}";
@@ -82,7 +82,7 @@ trait oAuth
     
     /**
      * Get Request headers
-     * @return type
+     * @return array
      */
     public function getHeaders(){
         if(isset($this->credentials["bearer"])){
@@ -114,7 +114,7 @@ trait oAuth
     
     /**
      * Set the correct domain name
-     * @param type $domainname
+     * @param string $domainname
      */
     public function setMastodonDomain($domainname = ""){
         if(!empty($domainname)){
@@ -141,8 +141,8 @@ trait oAuth
     
     /**
      * Handle our bearer token info
-     * @param type $token_info
-     * @return boolean
+     * @param array $token_info
+     * @return string | boolean
      */
     private function _handle_bearer($token_info = null){
         if(!empty($token_info) && isset($token_info["access_token"])){
@@ -154,10 +154,11 @@ trait oAuth
         }
         return false;
     }
-    
+
     /**
      * Get access token
-     * @param type $auth_code
+     * @param string $auth_code
+     * @return string | bool
      */
     public function getAccessToken($auth_code = ""){
         
@@ -182,11 +183,12 @@ trait oAuth
         }
         return false;
     }
-    
+
     /**
      * Authenticate a user by username and password
-     * @param type $username usernam@domainname.com
-     * @param type $password The password
+     * @param string $username usernam@domainname.com
+     * @param string $password The password
+     * @return bool
      */
     private function authUser($username = null, $password = null){
         if(!empty($username) && stristr($username, "@") !== FALSE && !empty($password)){
