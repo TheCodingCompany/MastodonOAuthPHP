@@ -149,7 +149,7 @@ $t = new \theCodingCompany\Mastodon();
 
 $t->setMastodonDomain(website address); // change this to whatever Mastodon instance you're using, or remove it entirely if you're using mastodon.social (as it's the default)
 
-$t->setCredentials($credentials); // where $credentials are your client_id, client_secret and bearer tokens
+$t->setCredentials($credentials); // where $credentials are your "client_id", "client_secret" and "bearer" in the form of an array with those exact names (from what you got in the earlier steps)
 
 $t->postStatus('API Test - PLZ ignore <3');
 ```
