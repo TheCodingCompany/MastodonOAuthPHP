@@ -52,6 +52,11 @@ $t = new \theCodingCompany\Mastodon();
  * Create a new App and get the client_id and client_secret
  */
 $token_info = $t->createApp("MyCoolAppName", "http://www.internet.com");
+
+$serializedData = serialize($token_info);
+
+// save the special tokens to a file, so you don't lose them
+file_put_contents('mastodon_creds', $serializedData); // this will save it in the same folder as this file
 ?>
 ```
 
