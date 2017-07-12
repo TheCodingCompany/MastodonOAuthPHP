@@ -133,14 +133,8 @@ $t->setCredentials(array(
 $token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f78148f848d475136"); //The access token you received in step 2 from the user.
 
 /**
- * The above '$token_info' will now be an array with the info like below. (If successfull)
- * No these are not real, your right.
+ * The above '$token_info' will now give you a bearer token (If successfull), you also need to store that and keep it safe!
  * 
-    {
-        "client_id": "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
-        "client_secret": "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6",
-        "bearer": "77e0daa7f252941ae8343543653454f4de8ca7ae087caec4ba85a363d5e08de0d"
-    }
 */
 ```
 
@@ -152,6 +146,8 @@ To then post a status, you just do this:
 require_once("autoload.php");
 
 $t = new \theCodingCompany\Mastodon();
+
+$t->setMastodonDomain(website address); // change this to whatever Mastodon instance you're using, or remove it entirely if you're using mastodon.social (as it's the default)
 
 $t->setCredentials($credentials); // where $credentials are your client_id, client_secret and bearer tokens
 
