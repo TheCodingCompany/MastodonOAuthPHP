@@ -79,16 +79,18 @@ Now you (your app) wants to provide services to a user. For this the user needs 
  */
 require_once("autoload.php");
 
+$recoveredData = file_get_contents('mastodon_creds');
+
+// unserializing to get actual array
+$recoveredArray = unserialize($recoveredData);
+
 $t = new \theCodingCompany\Mastodon();
 
 /**
  * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
  */
 $t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
-$t->setCredentials(array(
-    "client_id" => "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
-    "client_secret" => "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6"
-));
+$t->setCredentials($recoveredArray); // use the keys from the file we stored in Step 1
 
 /**
 * Now that is set we can get the Authorization URL and redirect the user to Mastodon
