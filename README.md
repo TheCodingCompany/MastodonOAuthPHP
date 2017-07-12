@@ -52,6 +52,11 @@ $t = new \theCodingCompany\Mastodon();
  * Create a new App and get the client_id and client_secret
  */
 $token_info = $t->createApp("MyCoolAppName", "http://www.internet.com");
+
+$serializedData = serialize($token_info);
+
+// save the special tokens to a file, so you don't lose them
+file_put_contents('mastodon_creds', $serializedData); // this will save it in the same folder as this file
 ?>
 ```
 
@@ -74,16 +79,18 @@ Now you (your app) wants to provide services to a user. For this the user needs 
  */
 require_once("autoload.php");
 
+$recoveredData = file_get_contents('mastodon_creds');
+
+// unserializing to get actual array
+$recoveredArray = unserialize($recoveredData);
+
 $t = new \theCodingCompany\Mastodon();
 
 /**
  * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
  */
 $t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
-$t->setCredentials(array(
-    "client_id" => "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
-    "client_secret" => "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6"
-));
+$t->setCredentials($recoveredArray); // use the keys from the file we stored in Step 1
 
 /**
 * Now that is set we can get the Authorization URL and redirect the user to Mastodon
@@ -135,6 +142,20 @@ $token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f7814
         "bearer": "77e0daa7f252941ae8343543653454f4de8ca7ae087caec4ba85a363d5e08de0d"
     }
 */
+```
+
+## Step 4
+
+To then post a status, you just do this:
+
+```
+require_once("autoload.php");
+
+$t = new \theCodingCompany\Mastodon();
+
+$t->setCredentials($credentials); // where $credentials are your client_id, client_secret and bearer tokens
+
+$t->postStatus('API Test - PLZ ignore <3');
 ```
 
 ## Full code overview options etc
