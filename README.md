@@ -89,7 +89,8 @@ $t = new \theCodingCompany\Mastodon();
 /**
  * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
  */
-$t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
+$t->setMastodonDomain("mastodon.social"); // Set the mastodon domain, you can remove this line if you're using mastodon.social as it's the default
+
 $t->setCredentials($recoveredArray); // use the keys from the file we stored in Step 1
 
 /**
@@ -129,7 +130,8 @@ $t = new \theCodingCompany\Mastodon();
 /**
  * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
  */
-$t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
+$t->setMastodonDomain("mastodon.social"); // Set the mastodon domain, you can remove this line if you're using mastodon.social as it's the default
+
 $t->setCredentials(recoveredArray); // use the keys from the file we stored in Step 1
 
 $token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f78148f848d475136"); //The access token you received in step 2 from the user.
