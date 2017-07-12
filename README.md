@@ -144,6 +144,20 @@ $token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f7814
 */
 ```
 
+## Step 4
+
+To then post a status, you just do this:
+
+```
+require_once("autoload.php");
+
+$t = new \theCodingCompany\Mastodon();
+
+$t->setCredentials($credentials); // where $credentials are your client_id, client_secret and bearer tokens
+
+$t->postStatus('API Test - PLZ ignore <3');
+```
+
 ## Full code overview options etc
 
 ```
