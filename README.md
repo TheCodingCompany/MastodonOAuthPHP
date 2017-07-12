@@ -25,6 +25,120 @@ Yes, mail me at: vangelier at hotmail dot com
 Contact me on #Twitter @digital_human
 Contact me on #Mastodon https://mastodon.social/@digitalhuman
 
+## Get started
+
+### Step 1
+
+First step is you need to create a so called App. This app represents your 'service'. With this app you provide services to users or use Mastodon for other reasons.
+
+To create an App is as simple as:
+
+```
+<?php
+/**
+ * Intellectual Property of #Mastodon
+ * 
+ * @copyright (c) 2017, #Mastodon
+ * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
+ * @version 1.0
+ * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
+ * 
+ */
+require_once("autoload.php");
+
+$t = new \theCodingCompany\Mastodon();
+
+/**
+ * Create a new App and get the client_id and client_secret
+ */
+$token_info = $t->createApp("MyCoolAppName", "http://www.internet.com");
+?>
+```
+
+The parameter ```$token_info``` now has your 'client_id' and 'client_secret'. This information is important for the rest of your life ;). Store it in a file, DB or array. You need this everytime you communicate with Mastodon.
+
+### Step 2
+
+Now you (your app) wants to provide services to a user. For this the user needs to authorize your app. Else you can't help him/her. To do this you need to redirect the user, with your tokens to Mastodon and ask for permission so to say. And example:
+
+```
+<?php
+/**
+ * Intellectual Property of #Mastodon
+ * 
+ * @copyright (c) 2017, #Mastodon
+ * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
+ * @version 1.0
+ * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
+ * 
+ */
+require_once("autoload.php");
+
+$t = new \theCodingCompany\Mastodon();
+
+/**
+ * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
+ */
+$t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
+$t->setCredentials(array(
+    "client_id" => "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
+    "client_secret" => "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6"
+));
+
+/**
+* Now that is set we can get the Authorization URL and redirect the user to Mastodon
+* After the user approves your App, it will return with an Access Token.
+*/
+$auth_url = $t->getAuthUrl();
+header("Location: {$auth_url}", true);
+exit;
+
+```
+
+### 3
+
+So you now have 3 tokens. The client_id, client_secret and the users access_token. Now exchange the access token for a bearer token and you are done. Save these tokens!
+
+```
+<?php
+/**
+ * Intellectual Property of #Mastodon
+ * 
+ * @copyright (c) 2017, #Mastodon
+ * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
+ * @version 1.0
+ * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
+ * 
+ */
+require_once("autoload.php");
+
+$t = new \theCodingCompany\Mastodon();
+
+/**
+ * We now have a client_id and client_secret. Set the domain and provide the library with your App's client_id and secret.
+ */
+$t->setMastodonDomain("mastodon.social"); //Set the mastodon domain
+$t->setCredentials(array(
+    "client_id" => "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
+    "client_secret" => "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6"
+));
+
+$token_info = $t->getAccessToken("7c47d0c636314a1dff21reryyy5edf91884856dc0f78148f848d475136"); //The access token you received in step 2 from the user.
+
+/**
+ * The above '$token_info' will now be an array with the info like below. (If successfull)
+ * No these are not real, your right.
+ * 
+    {
+        "client_id": "87885c2bf1a9d9845345345318d1eeeb1e48bb676aa747d3216adb96f07",
+        "client_secret": "a1284899df5250bd345345f5fb971a5af5c520ca2c3e4ce10c203f81c6",
+        "bearer": "77e0daa7f252941ae8343543653454f4de8ca7ae087caec4ba85a363d5e08de0d"
+    }
+*/
+```
+
+## Full code overview options etc
+
 ```
 <?php
 /**
