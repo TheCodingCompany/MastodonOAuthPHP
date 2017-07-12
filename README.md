@@ -95,7 +95,7 @@ exit;
 
 ```
 
-### 3
+### Step 3
 
 So you now have 3 tokens. The client_id, client_secret and the users access_token. Now exchange the access token for a bearer token and you are done. Save these tokens!
 
