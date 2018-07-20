@@ -1,12 +1,12 @@
 <?php
 /**
  * Intellectual Property of #Mastodon
- * 
+ *
  * @copyright (c) 2017, #Mastodon
  * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
  * @version 1.0
  * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
- * 
+ *
  */
 namespace theCodingCompany;
 
@@ -26,13 +26,13 @@ final class HttpRequest
      * @var string
      */
     private static $base_url = "";
-    
+
     /**
      * Holds our instance
      * @var array
      */
     private static $instance = array();
-    
+
     /**
      * Enable debugging
      * @var bool
@@ -44,13 +44,13 @@ final class HttpRequest
      * @param string $base_url Base url like http://api.website.com without leading /
      * @param string $base_path Base path like, / or /api
      */
-    protected function __construct($base_url = "", $base_path = "/") {            
+    protected function __construct($base_url = "", $base_path = "/") {
         self::$base_path = $base_path;
         self::$base_url = $base_url;
     }
     protected function __clone(){}
     protected function __wakeup(){}
-    
+
     /**
      * Singleton design pattern
      * @param string $base_url The full FQDN url. http://api.domainname.com
@@ -76,8 +76,8 @@ final class HttpRequest
         //Sen the request and return response
         $post_data = json_encode($parameters);
         return self::http_request(
-            "POST", 
-            self::$base_url.self::$base_path.$path, 
+            "POST",
+            self::$base_url.self::$base_path.$path,
             $headers,
             $post_data
         );
@@ -93,8 +93,8 @@ final class HttpRequest
     public static function Get($path = "", $parameters = array(), $headers = array()){
         //Sen the request and return response
         return self::http_request(
-            "GET", 
-            self::$base_url.self::$base_path.$path, 
+            "GET",
+            self::$base_url.self::$base_path.$path,
             $headers,
             $parameters
         );
@@ -126,25 +126,27 @@ final class HttpRequest
                 'ciphers' => 'HIGH'
             )
         );
-        
+
         //Check if we have parameters to post
-        if (count($parameters) > 0 && is_array($parameters)) {
-            $content = "";
-            foreach($parameters as $k => $v) {
-                $content .= "&".urlencode($k)."=" . urlencode($v);
-            }
+        if (is_array($parameters)) {
+            if (count($parameters) > 0) {
+                $content = "";
+                foreach($parameters as $k => $v) {
+                    $content .= "&".urlencode($k)."=" . urlencode($v);
+                }
 
-            // Strip first & sign
-            $content = substr($content, 1);
+                // Strip first & sign
+                $content = substr($content, 1);
 
-            // If the method is get, append to the URL            
-            if ($method == "GET") {
-                $url .= "?" . $content;
-            }
-            // Otherwise, post in the content
-            else {
-                //Strip first & sign
-                $opts["http"]["content"] = $content;
+                // If the method is get, append to the URL
+                if ($method == "GET") {
+                    $url .= "?" . $content;
+                }
+                // Otherwise, post in the content
+                else {
+                    //Strip first & sign
+                    $opts["http"]["content"] = $content;
+                }
             }
         }
         elseif ($parameters) {
@@ -153,13 +155,15 @@ final class HttpRequest
         }
 
         //Check if we have headers to parse
-        if (count($headers) > 0 && is_array($headers)) {
-            $content = "";
-            foreach ($headers as $k => $v) {
-                $content .= "{$k}: {$v}\r\n";
+        if (is_array($headers)) {
+            if (count($headers) > 0) {
+                $content = "";
+                foreach ($headers as $k => $v) {
+                    $content .= "{$k}: {$v}\r\n";
+                }
+                //Strip first & sign
+                $opts["http"]["header"] = trim($content);
             }
-            //Strip first & sign
-            $opts["http"]["header"] = trim($content);
         }
         if ($opts["http"]["header"] === "") {
             unset($opts["http"]["header"]);
@@ -183,15 +187,15 @@ final class HttpRequest
         if ($response === FALSE) {
             $error = "<pre>" . print_r(error_get_last(), true) . "</pre>";
             $error .= "<pre>" . print_r($response, true) . "</pre>";
-            
+
             if(self::$debug){ print_r($error); }
             return $error;
         }
         else{
-            
+
             //Debug the response/url
             self::debug_response($url, $context);
-            
+
             if (($json = \json_decode($response, true)) !== NULL) {
                 return $json;
             }
@@ -200,7 +204,7 @@ final class HttpRequest
             }
         }
     }
-    
+
     /**
      * Debug method for response analyzing
      * @param string $url
