@@ -1,12 +1,12 @@
 <?php
 /**
  * Intellectual Property of #Mastodon
- * 
+ *
  * @copyright (c) 2017, #Mastodon
  * @author V.A. (Victor) Angelier <victor@thecodingcompany.se>
  * @version 1.0
  * @license http://www.apache.org/licenses/GPL-compatibility.html GPL
- * 
+ *
  */
 namespace theCodingCompany;
 
@@ -19,24 +19,24 @@ class Mastodon
 {
     //Mastodon oAuth
     use \theCodingCompany\oAuth;
-    
+
     /**
      * Holds our current user_id for :id in API calls
      * @var string
      */
     private $mastodon_user_id = null;
-    
+
     /**
      * Holds our current userinfo
      * @var array
      */
     private $mastodon_userinfo = null;
-    
+
     /**
      * Construct new Mastodon class
      */
-    public function __construct($domainname = "mastodon.social") {        
-        
+    public function __construct($domainname = "mastodon.social") {
+
         //Set the domain name to use
         $this->setMastodonDomain($domainname);
     }
@@ -49,11 +49,11 @@ class Mastodon
      */
     public function createApp($name, $website_url){
         if(!empty($name) && !empty($website_url)){
-            
+
             //Set our info
             $this->app_config["client_name"] = $name;
             $this->app_config["website"]     = $website_url;
-            
+
             return $this->getAppConfig();
         }
         return false;
@@ -67,10 +67,10 @@ class Mastodon
      */
     public function authenticate($username = null, $password = null) {
         $this->authUser($username, $password);
-        
+
         //Set current working userid
         $this->mastodon_userinfo = $this->getUser();
-        
+
         return $this; //For method chaining
     }
 
@@ -82,9 +82,9 @@ class Mastodon
      */
     public function postStatus($text = "", $visibility = "public", $in_reply_to_id = null){
         if(!empty($this->getCredentials())){
-            
+
             $headers = $this->getHeaders();
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             $status = $http::Post(
@@ -100,11 +100,11 @@ class Mastodon
         }
         return false;
     }
-    
+
     /**
      * Get mastodon user
      */
-    public function getUser(){        
+    public function getUser(){
         if(empty($this->mastodon_userinfo)){
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
@@ -122,13 +122,13 @@ class Mastodon
         }
         return $this->mastodon_userinfo;
     }
-    
+
     /**
      * Get current user's followers
      */
     public function getFollowers(){
         if($this->mastodon_user_id > 0){
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             $accounts = $http::Get(
@@ -136,20 +136,21 @@ class Mastodon
                 null,
                 $this->getHeaders()
             );
-            if(is_array($accounts) && count($accounts) > 0){
-                return $accounts;
+            if(is_array($accounts)){
+                if (count($accounts) > 0) {
+                    return $accounts;
+                }
             }
-            
         }
         return false;
     }
-    
+
     /**
      * Get current user's following
      */
     public function getFollowing(){
         if($this->mastodon_user_id > 0){
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             $accounts = $http::Get(
@@ -157,20 +158,21 @@ class Mastodon
                 null,
                 $this->getHeaders()
             );
-            if(is_array($accounts) && count($accounts) > 0){
-                return $accounts;
+            if(is_array($accounts)) {
+                if (count($accounts) > 0){
+                    return $accounts;
+                }
             }
-            
         }
         return false;
     }
-    
+
     /**
      * Get current user's statuses
      */
     public function getStatuses(){
         if($this->mastodon_user_id > 0){
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
             $statusses = $http::Get(
@@ -178,10 +180,12 @@ class Mastodon
                 null,
                 $this->getHeaders()
             );
-            if(is_array($statusses) && count($statusses) > 0){
-                return $statusses;
+            if(is_array($statusses)) {
+                if (count($statusses) > 0) {
+                    return $statusses;
+                }
             }
-            
+
         }
         return false;
     }
@@ -189,22 +193,24 @@ class Mastodon
     /**
      * Get current user's notifications. If $since_id is provided, will only get the items
      * after since_id.
-     * 
+     *
      */
     public function getNotifications($since_id = null){
         if($this->mastodon_user_id > 0){
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
-            
+
             $notifications = $http::Get(
                 "api/v1/notifications",
                 ($since_id != null ? array('since_id'=>$since_id) : null),
                 $this->getHeaders()
             );
-            
-            if(is_array($notifications) && count($notifications) > 0){
-                return $notifications;
+
+            if(is_array($notifications)) {
+                if (count($notifications) > 0) {
+                    return $notifications;
+                }
             }
         }
         return false;
@@ -212,20 +218,20 @@ class Mastodon
 
     /**
      * Clears the user's notifications. Returns true if successful.
-     * 
+     *
      */
     public function clearNotifications(){
         if($this->mastodon_user_id > 0){
-            
+
             //Create our object
             $http = HttpRequest::Instance($this->getApiURL());
-            
+
             $clear_result = $http::Post(
                 "api/v1/notifications/clear",
                 null,
                 $this->getHeaders()
             );
-            
+
             if(is_array($clear_result)) {
                 return true;
             }
@@ -235,5 +241,5 @@ class Mastodon
         }
         return false;
     }
-    
+
 }
